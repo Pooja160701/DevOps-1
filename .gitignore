@@ -1,0 +1,5 @@
+# Ignore large tar or binary files
+*.tar
+*.zip
+*.iso
+*.img
