@@ -1,0 +1,5 @@
+2025-10-30 06:24:48 - OK: CPU usage 73% <= 80%
+2025-10-30 06:24:48 - OK: Memory usage 53% <= 80%
+2025-10-30 06:24:48 - OK: Disk usage 1% <= 85%
+2025-10-30 06:24:49 - OK: Process count 33 <= 400
+2025-10-30 06:24:49 - SUMMARY: All checks OK

@@ -1,0 +1,2 @@
+2025-10-30 07:10:00.126180 - Application is UP! (https://www.google.com) - Status Code: 200
+2025-10-30 07:10:38.168564 - Application is DOWN! Error: HTTPSConnectionPool(host='thiswebsitedoesnotexist12345.com', port=443): Max retries exceeded with url: / (Caused by NameResolutionError("<urllib3.connection.HTTPSConnection object at 0x79acc68182c0>: Failed to resolve 'thiswebsitedoesnotexist12345.com' ([Errno -2] Name or service not known)"))
