@@ -1,0 +1,59 @@
+# kubearmor-zero-trust-ps1.yaml
+# Purpose: least-permissive (zero-trust) policy for the PS1 workload.
+# Assumptions:
+#  - Pod(s) have label: app=ps1-app
+#  - Namespace: default
+# If your pod label or namespace differs, change selector.matchLabels and metadata.namespace below.
+
+apiVersion: security.kubearmor.com/v1
+kind: KubeArmorPolicy
+metadata:
+  name: zero-trust-ps1
+  namespace: default
+spec:
+  severity: 10
+  message: "Zero-trust: allow only the app binary, its file reads, and TCP network from the app binary"
+  tags:
+    - zero-trust
+    - least-permissive
+  selector:
+    matchLabels:
+      app: ps1-app           # <-- change this to the label your PS1 pod uses (e.g., app=your-app)
+  # NOTE: using Allow rules puts the pod into least-permissive mode:
+  # Only operations explicitly Allowed are permitted; everything else is denied/audited.
+  process:
+    # Allow only the expected app executable(s).
+    # Replace path(s) with the exact path of your workload binary inside the container.
+    matchPaths:
+      - path: /usr/local/bin/ps1-binary
+      - path: /usr/bin/nginx        # (optional) example if your workload uses another binary
+    action: Allow
+
+  file:
+    # Allow read access to config and cert directories but only when accessed by the allowed binary.
+    matchDirectories:
+      - dir: /app/config/
+        fromSource:
+          - path: /usr/local/bin/ps1-binary
+        # readOnly is supported by KubeArmor for file rules. This makes the allowance read-only.
+        readOnly: true
+      - dir: /etc/ssl/certs/
+        fromSource:
+          - path: /usr/local/bin/ps1-binary
+        readOnly: true
+    action: Allow
+
+  network:
+    # KubeArmor currently matches by protocol. Here we allow TCP only and only when initiated from the app binary.
+    matchProtocols:
+      - protocol: TCP
+        fromSource:
+          - path: /usr/local/bin/ps1-binary
+    action: Allow
+
+  capabilities:
+    # Disallow dangerous capabilities by not explicitly allowing them (default deny).
+    # If you want to explicitly block CAP_NET_RAW or others:
+    matchCapabilities:
+      - capability: net_raw
+    action: Block

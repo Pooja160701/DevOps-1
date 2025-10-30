@@ -5,3 +5,7 @@
 - Apply the policy to your cluster.
 - Capture a screenshot showcasing policy violations.
 - Commit your policy YAML and the screenshot to your forked repo. 
+
+## Results
+
+![Policy Violation Screenshot](result.png)
